@@ -1,14 +1,30 @@
+import com.jme3.app.SimpleApplication;
+import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
-import example.HelloAsset;
+import states.CityAppState;
+import states.LightAppState;
+import states.PhysicsAppState;
 
-public class MissileSimulator {
+public class MissileSimulator extends SimpleApplication {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setResolution(1280, 720);
         settings.setTitle("Missile Simulator");
 
-        CoreApplication coreApp = new CoreApplication();
-        coreApp.setSettings(settings);
-        coreApp.start();
+        MissileSimulator simulator = new MissileSimulator();
+        simulator.setSettings(settings);
+        simulator.start();
     }
+
+    @Override
+    public void simpleInitApp() {
+        setDisplayStatView(false);
+        viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        flyCam.setMoveSpeed(1000);
+
+        stateManager.attach(new PhysicsAppState());
+        stateManager.attach(new LightAppState());
+        stateManager.attach(new CityAppState());
+    }
+
 }
