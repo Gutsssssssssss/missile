@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="HelloJME3" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="HelloJME3" />
+    <option name="MAIN_CLASS_NAME" value="example.HelloJME3" />
     <module name="missile" />
     <option name="VM_PARAMETERS" value="-XstartOnFirstThread" />
     <method v="2">
