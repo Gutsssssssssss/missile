@@ -13,7 +13,7 @@ public class PhysicsAppState extends BaseAppState {
     }
 
     public BulletAppState getBulletAppState() {
-        return bulletAppState;
+        return this.bulletAppState;
     }
 
     @Override
