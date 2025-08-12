@@ -22,6 +22,7 @@ public class MissileSimulator extends SimpleApplication {
     public void simpleInitApp() {
         setDisplayStatView(false);
         viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        cam.setFrustumFar(50000f);
         flyCam.setMoveSpeed(1000);
 
         stateManager.attach(new PhysicsAppState());
@@ -29,7 +30,7 @@ public class MissileSimulator extends SimpleApplication {
         stateManager.attach(new CityAppState());
         stateManager.attach(new BallisticMissileAppState());
 
-        cam.setLocation(new Vector3f(17000, 10, 0));
+//        cam.setLocation(new Vector3f(-17000, 10, 0));
         cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
 
     }
