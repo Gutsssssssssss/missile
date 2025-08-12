@@ -6,8 +6,10 @@ import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.input.ChaseCamera;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -29,6 +31,7 @@ public class BallisticMissileAppState extends BaseAppState {
         Node city = cityAppState.getCity();
 
         ballisticMissile = (Node) assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
+        ballisticMissile.setName("BallisticMissile");
         ballisticMissile.rotate(0, -FastMath.PI, 0);
 
         ballisticMissile.setLocalTranslation(new Vector3f(-17000, 29f, 0));
@@ -67,10 +70,58 @@ public class BallisticMissileAppState extends BaseAppState {
         physics.getBulletAppState().getPhysicsSpace().add(floorControl);
 
 //        // chase cam
-        ChaseCamera chaseCamera = new ChaseCamera(simulator.getCamera(), ballisticMissile, simulator.getInputManager());
-        chaseCamera.setDefaultDistance(100);
-        chaseCamera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 45);
+//        ChaseCamera chaseCamera = new ChaseCamera(simulator.getCamera(), ballisticMissile, simulator.getInputManager());
+//        chaseCamera.setDefaultDistance(100);
+//        chaseCamera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 45);
+
+        physics.getBulletAppState().getPhysicsSpace().addCollisionListener((event) -> {
+            String a = event.getNodeA().getName();
+            String b = event.getNodeB().getName();
+
+            if (isMissileHitCity(a, b)) {
+                Vector3f contactPoint = event.getPositionWorldOnB();
+                spawnExplosion(contactPoint, assetManager, rootNode);
+                removeMissile(physics);
+            }
+        });
+
     }
+
+    private boolean isMissileHitCity(String a, String b) {
+        return (a.equals("BallisticMissile") && b.equals("City"))
+                || (a.equals("City") && b.equals("BallisticMissile"));
+    }
+
+    private void spawnExplosion(Vector3f location, AssetManager assetManager, Node rootNode) {
+        ParticleEmitter explosion = new ParticleEmitter("BigExplosion", ParticleMesh.Type.Triangle, 150);
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+        explosion.setMaterial(mat);
+
+        explosion.setImagesX(2);
+        explosion.setImagesY(2);
+        explosion.setStartColor(ColorRGBA.Orange);
+        explosion.setEndColor(ColorRGBA.Red);
+        explosion.setStartSize(6f);
+        explosion.setEndSize(1f);
+        explosion.setGravity(0, -4, 0);
+        explosion.setLowLife(1f);
+        explosion.setHighLife(3f);
+        explosion.getParticleInfluencer().setInitialVelocity(new Vector3f(0, 12, 0));
+        explosion.getParticleInfluencer().setVelocityVariation(3f);
+
+        explosion.setLocalTranslation(location);
+        rootNode.attachChild(explosion);
+        explosion.emitAllParticles();
+    }
+
+    private void removeMissile(PhysicsAppState physics) {
+        physics.getBulletAppState().getPhysicsSpace()
+                .remove(ballisticMissile.getControl(RigidBodyControl.class));
+        ballisticMissile.removeFromParent();
+    }
+
+
 
     @Override
     protected void cleanup(Application application) {
@@ -91,7 +142,6 @@ public class BallisticMissileAppState extends BaseAppState {
     public void update(float tpf) {
         RigidBodyControl ballisticMissileControl = ballisticMissile.getControl(RigidBodyControl.class);
         Vector3f velocity = ballisticMissileControl.getLinearVelocity();
-
         if (velocity.lengthSquared() > 0.001f) {
             Vector3f direction = velocity.normalize();
             Quaternion rotation = new Quaternion();

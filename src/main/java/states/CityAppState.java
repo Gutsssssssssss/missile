@@ -22,6 +22,7 @@ public class CityAppState extends BaseAppState {
         AssetManager assetManager = simulator.getAssetManager();
 
         this.city = (Node) assetManager.loadModel(new ModelKey("Scenes/city/city.glb"));
+        this.city.setName("City");
         this.city.setLocalScale(0.03f);
         this.city.setLocalTranslation(new Vector3f(0, -100, 0));
 
