@@ -33,7 +33,6 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
         this.missileNode = (Node) this.assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
         this.missileNode.setName("BallisticMissile");
-//        this.missileNode.rotate(0, -FastMath.PI, 0);
         this.missileNode.setLocalTranslation(new Vector3f(-17000, 29f, 0));
         RigidBodyControl missileControl = new RigidBodyControl(1f);
         this.missileNode.addControl(missileControl);
@@ -56,7 +55,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
             }
         });
 
-        chaseCameraAppState.setChaseCamera(missileNode);
+//        chaseCameraAppState.setChaseCamera(missileNode);
     }
 
     private static Vector3f getMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
