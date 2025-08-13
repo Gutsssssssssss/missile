@@ -2,7 +2,6 @@ package states;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -11,7 +10,7 @@ import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-public class CityAppState extends BaseAppState {
+public class CityAppState extends AbstractEmptyAppState {
 
     private Node city;
 
@@ -32,25 +31,10 @@ public class CityAppState extends BaseAppState {
 
         rootNode.attachChild(this.city);
         PhysicsAppState physics = getState(PhysicsAppState.class);
-        physics.getBulletAppState().getPhysicsSpace().add(this.city);
+        physics.addToPhysicsSpace(this.city);
     }
 
-    public Node getCity() {
-        return this.city;
-    }
-
-    @Override
-    protected void cleanup(Application application) {
-
-    }
-
-    @Override
-    protected void onEnable() {
-
-    }
-
-    @Override
-    protected void onDisable() {
-
+    public Vector3f getWorldTranslation() {
+        return this.city.getWorldTranslation();
     }
 }

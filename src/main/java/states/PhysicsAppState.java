@@ -1,33 +1,31 @@
 package states;
 
 import com.jme3.app.Application;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.scene.Spatial;
 
-public class PhysicsAppState extends BaseAppState {
+public class PhysicsAppState extends AbstractEmptyAppState {
+
     private BulletAppState bulletAppState;
+
     @Override
     protected void initialize(Application application) {
         bulletAppState = new BulletAppState();
         getStateManager().attach(bulletAppState);
     }
 
-    public BulletAppState getBulletAppState() {
-        return this.bulletAppState;
+    public void addToPhysicsSpace(Spatial obj) {
+        this.bulletAppState.getPhysicsSpace().add(obj);
     }
 
-    @Override
-    protected void cleanup(Application application) {
-
+    public void removeFromPhysicsSpace(RigidBodyControl rigidBodyControl) {
+        this.bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
     }
 
-    @Override
-    protected void onEnable() {
-
+    public PhysicsSpace getPhysicsSpace() {
+        return this.bulletAppState.getPhysicsSpace();
     }
 
-    @Override
-    protected void onDisable() {
-
-    }
 }

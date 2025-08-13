@@ -2,10 +2,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
-import states.BallisticMissileAppState;
-import states.CityAppState;
-import states.LightAppState;
-import states.PhysicsAppState;
+import states.*;
 
 public class MissileSimulator extends SimpleApplication {
     public static void main(String[] args) {
@@ -29,6 +26,7 @@ public class MissileSimulator extends SimpleApplication {
         stateManager.attach(new LightAppState());
         stateManager.attach(new CityAppState());
         stateManager.attach(new BallisticMissileAppState());
+        stateManager.attach(new CollisionAppState());
 
 //        cam.setLocation(new Vector3f(-17000, 10, 0));
         cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);

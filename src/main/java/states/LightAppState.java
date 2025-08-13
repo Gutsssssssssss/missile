@@ -2,14 +2,14 @@ package states;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
-import com.jme3.app.state.BaseAppState;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
-public class LightAppState extends BaseAppState {
+public class LightAppState extends AbstractEmptyAppState {
+
     @Override
     protected void initialize(Application application) {
         Node rootNode = ((SimpleApplication) application).getRootNode();
@@ -29,18 +29,4 @@ public class LightAppState extends BaseAppState {
         rootNode.addLight(dl2);
     }
 
-    @Override
-    protected void cleanup(Application application) {
-
-    }
-
-    @Override
-    protected void onEnable() {
-
-    }
-
-    @Override
-    protected void onDisable() {
-
-    }
 }
