@@ -33,7 +33,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
         this.missileNode = (Node) this.assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
         this.missileNode.setName("BallisticMissile");
-        this.missileNode.rotate(0, -FastMath.PI, 0);
+//        this.missileNode.rotate(0, -FastMath.PI, 0);
         this.missileNode.setLocalTranslation(new Vector3f(-17000, 29f, 0));
         RigidBodyControl missileControl = new RigidBodyControl(1f);
         this.missileNode.addControl(missileControl);
@@ -109,17 +109,15 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
     @Override
     public void update(float tpf) {
-        RigidBodyControl ballisticMissileControl = this.missileNode.getControl(RigidBodyControl.class);
-        Vector3f velocity = ballisticMissileControl.getLinearVelocity();
-        if (velocity.lengthSquared() > 0.001f) {
-            Vector3f direction = velocity.normalize();
-            Quaternion rotation = new Quaternion();
-            rotation.lookAt(direction, Vector3f.UNIT_Y);
-
+        RigidBodyControl ctrl = this.missileNode.getControl(RigidBodyControl.class);
+        Vector3f vel = ctrl.getLinearVelocity();
+        if (vel.lengthSquared() > 1e-3f) {
+            Quaternion rot = new Quaternion();
+            rot.lookAt(vel.normalize(), Vector3f.UNIT_Y);
             Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
-            rotation = rotation.mult(offset);
-
-            this.missileNode.setLocalRotation(rotation);
+            rot = rot.mult(offset);
+            ctrl.setPhysicsRotation(rot);
         }
     }
+
 }

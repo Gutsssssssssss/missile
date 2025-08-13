@@ -19,6 +19,6 @@ public class ChaseCameraAppState extends AbstractEmptyAppState {
     public void setChaseCamera(Spatial obj) {
         ChaseCamera chaseCamera = new ChaseCamera(camera, obj, inputManager);
         chaseCamera.setDefaultDistance(100);
-        chaseCamera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 45);
+        chaseCamera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * -180);
     }
 }
