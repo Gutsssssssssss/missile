@@ -6,6 +6,9 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Spatial;
 
+/**
+ * Manages the physics simulation using jMonkeyEngine's Bullet physics engine.
+ * **/
 public class PhysicsAppState extends AbstractEmptyAppState {
 
     private BulletAppState bulletAppState;

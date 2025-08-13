@@ -3,6 +3,11 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
 import states.*;
 
+/**
+ * Main application class for the Missile Simulator.
+ * Initializes the jMonkeyEngine application, sets up the scene, and attaches
+ * AppState class to manage physics, objects etc.
+ **/
 public class MissileSimulator extends SimpleApplication {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);

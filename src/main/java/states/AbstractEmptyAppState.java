@@ -3,6 +3,9 @@ package states;
 import com.jme3.app.Application;
 import com.jme3.app.state.BaseAppState;
 
+/**
+ * Base class for AppState implementations, providing empty method overrides.
+ * **/
 public class AbstractEmptyAppState extends BaseAppState {
 
     @Override

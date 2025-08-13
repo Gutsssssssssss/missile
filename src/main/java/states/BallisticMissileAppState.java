@@ -31,7 +31,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         CityAppState cityAppState = getState(CityAppState.class);
         ChaseCameraAppState chaseCameraAppState = getState(ChaseCameraAppState.class);
 
-        this.missileNode = (Node) assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
+        this.missileNode = (Node) this.assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
         this.missileNode.setName("BallisticMissile");
         this.missileNode.rotate(0, -FastMath.PI, 0);
         this.missileNode.setLocalTranslation(new Vector3f(-17000, 29f, 0));
@@ -42,7 +42,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         Vector3f target = cityAppState.getWorldTranslation();
         Vector3f missileVelocity = getMissileVelocity(target, start, 70f);
         missileControl.setLinearVelocity(missileVelocity);
-        rootNode.attachChild(this.missileNode);
+        this.rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
 
         collisionAppState.setListener(event -> {
@@ -51,7 +51,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
             if (isMissileHitCity(a, b)) {
                 Vector3f contactPoint = event.getPositionWorldOnB();
-                spawnExplosion(contactPoint, assetManager, rootNode);
+                spawnExplosion(contactPoint);
                 removeMissile(physicsAppState);
             }
         });
@@ -79,10 +79,10 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
                 || (a.equals("City") && b.equals("BallisticMissile"));
     }
 
-    private void spawnExplosion(Vector3f location, AssetManager assetManager, Node rootNode) {
+    private void spawnExplosion(Vector3f location) {
         ParticleEmitter explosion = new ParticleEmitter("BigExplosion", ParticleMesh.Type.Triangle, 150);
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
-        mat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+        Material mat = new Material(this.assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        mat.setTexture("Texture", this.assetManager.loadTexture("Effects/Explosion/flame.png"));
         explosion.setMaterial(mat);
 
         explosion.setImagesX(2);
@@ -98,7 +98,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         explosion.getParticleInfluencer().setVelocityVariation(3f);
 
         explosion.setLocalTranslation(location);
-        rootNode.attachChild(explosion);
+        this.rootNode.attachChild(explosion);
         explosion.emitAllParticles();
     }
 

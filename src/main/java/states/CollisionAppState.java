@@ -5,6 +5,9 @@ import com.jme3.bullet.collision.PhysicsCollisionEvent;
 
 import java.util.function.Consumer;
 
+/**
+ * Manages collision detection by registering a listener for physics events.
+ * **/
 public class CollisionAppState extends AbstractEmptyAppState {
 
     private Consumer<PhysicsCollisionEvent> listener;
