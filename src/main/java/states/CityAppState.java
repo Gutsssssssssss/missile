@@ -1,7 +1,6 @@
 package states;
 
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.collision.shapes.CollisionShape;
@@ -12,29 +11,32 @@ import com.jme3.scene.Node;
 
 public class CityAppState extends AbstractEmptyAppState {
 
-    private Node city;
+    private final Node rootNode;
+    private final AssetManager assetManager;
+    private Node cityNode;
+
+    public CityAppState(Node rootNode, AssetManager assetManager) {
+        this.rootNode = rootNode;
+        this.assetManager = assetManager;
+    }
 
     @Override
     protected void initialize(Application application) {
-        SimpleApplication simulator = (SimpleApplication) application;
-        Node rootNode = simulator.getRootNode();
-        AssetManager assetManager = simulator.getAssetManager();
+        this.cityNode = (Node) assetManager.loadModel(new ModelKey("Scenes/city/city.glb"));
+        this.cityNode.setName("City");
+        this.cityNode.setLocalScale(0.03f);
+        this.cityNode.setLocalTranslation(new Vector3f(0, -100, 0));
 
-        this.city = (Node) assetManager.loadModel(new ModelKey("Scenes/city/city.glb"));
-        this.city.setName("City");
-        this.city.setLocalScale(0.03f);
-        this.city.setLocalTranslation(new Vector3f(0, -100, 0));
-
-        CollisionShape cityShape = CollisionShapeFactory.createMeshShape(this.city);
+        CollisionShape cityShape = CollisionShapeFactory.createMeshShape(this.cityNode);
         RigidBodyControl cityRigidBody = new RigidBodyControl(cityShape, 0);
-        this.city.addControl(cityRigidBody);
+        this.cityNode.addControl(cityRigidBody);
 
-        rootNode.attachChild(this.city);
+        rootNode.attachChild(this.cityNode);
         PhysicsAppState physics = getState(PhysicsAppState.class);
-        physics.addToPhysicsSpace(this.city);
+        physics.addToPhysicsSpace(this.cityNode);
     }
 
     public Vector3f getWorldTranslation() {
-        return this.city.getWorldTranslation();
+        return this.cityNode.getWorldTranslation();
     }
 }

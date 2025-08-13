@@ -1,6 +1,5 @@
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.system.AppSettings;
 import states.*;
 
@@ -24,13 +23,13 @@ public class MissileSimulator extends SimpleApplication {
 
         stateManager.attach(new PhysicsAppState());
         stateManager.attach(new LightAppState());
-        stateManager.attach(new CityAppState());
-        stateManager.attach(new BallisticMissileAppState());
+        stateManager.attach(new CityAppState(rootNode, assetManager));
+        stateManager.attach(new BallisticMissileAppState(rootNode, assetManager));
         stateManager.attach(new CollisionAppState());
+        stateManager.attach(new FloorAppState(rootNode, assetManager));
+        stateManager.attach(new ChaseCameraAppState(cam, inputManager));
 
 //        cam.setLocation(new Vector3f(-17000, 10, 0));
-        cam.lookAt(new Vector3f(0, 0, 0), Vector3f.UNIT_Y);
-
     }
 
 

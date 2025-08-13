@@ -1,7 +1,6 @@
 package states;
 
 import com.jme3.app.Application;
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -12,69 +11,55 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
 
 public class BallisticMissileAppState extends AbstractEmptyAppState {
 
-    private Node ballisticMissile;
+    private final Node rootNode;
+    private final AssetManager assetManager;
+    private Node missileNode;
+
+    public BallisticMissileAppState(Node rootNode, AssetManager assetManager) {
+        this.rootNode = rootNode;
+        this.assetManager = assetManager;
+    }
 
     @Override
     protected void initialize(Application application) {
-        SimpleApplication simulator = (SimpleApplication) application;
-        Node rootNode = simulator.getRootNode();
-        AssetManager assetManager = simulator.getAssetManager();
-        PhysicsAppState physics = getState(PhysicsAppState.class);
-        CollisionAppState collisionState = getState(CollisionAppState.class);
+        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
+        CollisionAppState collisionAppState = getState(CollisionAppState.class);
+        CityAppState cityAppState = getState(CityAppState.class);
+        ChaseCameraAppState chaseCameraAppState = getState(ChaseCameraAppState.class);
 
-        CityAppState cityAppState = simulator.getStateManager().getState(CityAppState.class);
+        this.missileNode = (Node) assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
+        this.missileNode.setName("BallisticMissile");
+        this.missileNode.rotate(0, -FastMath.PI, 0);
+        this.missileNode.setLocalTranslation(new Vector3f(-17000, 29f, 0));
+        RigidBodyControl missileControl = new RigidBodyControl(1f);
+        this.missileNode.addControl(missileControl);
 
-        ballisticMissile = (Node) assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
-        ballisticMissile.setName("BallisticMissile");
-        ballisticMissile.rotate(0, -FastMath.PI, 0);
-        ballisticMissile.setLocalTranslation(new Vector3f(-17000, 29f, 0));
-        RigidBodyControl ballisticMissileControl = new RigidBodyControl(1f);
-        ballisticMissile.addControl(ballisticMissileControl);
-
-        // velocity
-        Vector3f start = ballisticMissile.getWorldTranslation();
+        Vector3f start = this.missileNode.getWorldTranslation();
         Vector3f target = cityAppState.getWorldTranslation();
-        Vector3f ballisticMissileVelocity = getBallisticMissileVelocity(target, start, 45f);
-        ballisticMissileControl.setLinearVelocity(ballisticMissileVelocity);
-        rootNode.attachChild(ballisticMissile);
-        physics.addToPhysicsSpace(ballisticMissile);
+        Vector3f missileVelocity = getMissileVelocity(target, start, 70f);
+        missileControl.setLinearVelocity(missileVelocity);
+        rootNode.attachChild(this.missileNode);
+        physicsAppState.addToPhysicsSpace(this.missileNode);
 
-        // floor
-        Geometry floor = new Geometry("Floor", new Box(40f, 0.1f, 20f));
-        Material matFloor = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        matFloor.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
-        floor.setMaterial(matFloor);
-        floor.setLocalTranslation(new Vector3f(-17000, 0, 0));
-        RigidBodyControl floorControl = new RigidBodyControl(0);
-        floor.addControl(floorControl);
-        rootNode.attachChild(floor);
-        physics.addToPhysicsSpace(ballisticMissile);
-
-        // chase cam
-//        ChaseCamera chaseCamera = new ChaseCamera(simulator.getCamera(), ballisticMissile, simulator.getInputManager());
-//        chaseCamera.setDefaultDistance(100);
-//        chaseCamera.setDefaultVerticalRotation(FastMath.DEG_TO_RAD * 45);
-
-
-        collisionState.setListener(event -> {
+        collisionAppState.setListener(event -> {
             String a = event.getNodeA().getName();
             String b = event.getNodeB().getName();
 
             if (isMissileHitCity(a, b)) {
                 Vector3f contactPoint = event.getPositionWorldOnB();
                 spawnExplosion(contactPoint, assetManager, rootNode);
-                removeMissile(physics);
+                removeMissile(physicsAppState);
             }
         });
+
+        chaseCameraAppState.setChaseCamera(missileNode);
     }
 
-    private static Vector3f getBallisticMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
+    private static Vector3f getMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
         float g = 9.81f;
 
         Vector3f toTarget = target.subtract(start);
@@ -117,14 +102,14 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         explosion.emitAllParticles();
     }
 
-    private void removeMissile(PhysicsAppState physics) {
-        physics.removeFromPhysicsSpace(ballisticMissile.getControl(RigidBodyControl.class));
-        ballisticMissile.removeFromParent();
+    private void removeMissile(PhysicsAppState physicsAppState) {
+        physicsAppState.removeFromPhysicsSpace(this.missileNode.getControl(RigidBodyControl.class));
+        this.missileNode.removeFromParent();
     }
 
     @Override
     public void update(float tpf) {
-        RigidBodyControl ballisticMissileControl = ballisticMissile.getControl(RigidBodyControl.class);
+        RigidBodyControl ballisticMissileControl = this.missileNode.getControl(RigidBodyControl.class);
         Vector3f velocity = ballisticMissileControl.getLinearVelocity();
         if (velocity.lengthSquared() > 0.001f) {
             Vector3f direction = velocity.normalize();
@@ -134,7 +119,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
             Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
             rotation = rotation.mult(offset);
 
-            ballisticMissile.setLocalRotation(rotation);
+            this.missileNode.setLocalRotation(rotation);
         }
     }
 }
