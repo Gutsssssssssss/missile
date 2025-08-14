@@ -1,5 +1,7 @@
 import com.jme3.app.SimpleApplication;
 import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.Camera;
+import com.jme3.renderer.ViewPort;
 import com.jme3.system.AppSettings;
 import states.*;
 
@@ -26,13 +28,20 @@ public class MissileSimulator extends SimpleApplication {
         cam.setFrustumFar(50000f);
         flyCam.setMoveSpeed(1000);
 
+        Camera missileCam = cam.clone();
+        missileCam.setViewPort(0.8f, 1.0f, 0.0f, 0.2f);
+        ViewPort missileView = renderManager.createMainView("missile view", missileCam);
+        missileView.setClearFlags(true, true, true);
+        missileView.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        missileView.attachScene(rootNode);
+
         stateManager.attach(new PhysicsAppState());
         stateManager.attach(new LightAppState());
         stateManager.attach(new CityAppState(rootNode, assetManager));
         stateManager.attach(new BallisticMissileAppState(rootNode, assetManager));
         stateManager.attach(new CollisionAppState());
         stateManager.attach(new FloorAppState(rootNode, assetManager));
-        stateManager.attach(new ChaseCameraAppState(cam, inputManager));
+        stateManager.attach(new ChaseCameraAppState(missileCam, inputManager));
 
 //        cam.setLocation(new Vector3f(-17000, 10, 0));
     }
