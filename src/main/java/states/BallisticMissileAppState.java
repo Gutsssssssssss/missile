@@ -18,6 +18,8 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
     private final Node rootNode;
     private final AssetManager assetManager;
     private Node missileNode;
+    private ParticleEmitter booster;
+    private ParticleEmitter smoke;
 
     public BallisticMissileAppState(Node rootNode, AssetManager assetManager) {
         this.rootNode = rootNode;
@@ -39,7 +41,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
         Vector3f start = this.missileNode.getWorldTranslation();
         Vector3f target = cityAppState.getWorldTranslation();
-        Vector3f missileVelocity = getMissileVelocity(target, start, 70f);
+        Vector3f missileVelocity = calculateMissileVelocity(target, start, 45f);
         missileControl.setLinearVelocity(missileVelocity);
         this.rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
@@ -55,22 +57,23 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
             }
         });
 
-//        chaseCameraAppState.setChaseCamera(missileNode);
+        initEffects(assetManager, missileNode);
+        chaseCameraAppState.setChaseCamera(missileNode);
     }
 
-    private static Vector3f getMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
+    private Vector3f calculateMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
         float g = 9.81f;
 
         Vector3f toTarget = target.subtract(start);
-        float dx = (float) Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+        float distanceXZ = (float) Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
         float thetaRad = (float)Math.toRadians(thetaDeg);
-        float v = (float)Math.sqrt(dx * g / Math.sin(2 * thetaRad));
+        float velocity = (float)Math.sqrt(distanceXZ * g / Math.sin(2 * thetaRad));
 
-        float vxz = (float)(v * Math.cos(thetaRad));
-        float vy  = (float)(v * Math.sin(thetaRad));
+        float velocityXZ = (float)(velocity * Math.cos(thetaRad));
+        float velocityY  = (float)(velocity * Math.sin(thetaRad));
 
-        Vector3f dirXZ = new Vector3f(toTarget.x, 0, toTarget.z).normalizeLocal();
-        return dirXZ.mult(vxz).add(0, vy, 0);
+        Vector3f directionXZ = new Vector3f(toTarget.x, 0, toTarget.z).normalizeLocal();
+        return directionXZ.mult(velocityXZ).add(0, velocityY, 0);
     }
 
     private boolean isMissileHitCity(String a, String b) {
@@ -106,6 +109,39 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         this.missileNode.removeFromParent();
     }
 
+    private void initEffects(AssetManager assetManager, Node missileNode) {
+        booster = new ParticleEmitter("Booster", ParticleMesh.Type.Triangle, 100);
+        Material boosterMat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        boosterMat.setTexture("Texture", assetManager.loadTexture("Effects/Explosion/flame.png"));
+        booster.setMaterial(boosterMat);
+        booster.setStartColor(ColorRGBA.Orange);
+        booster.setEndColor(ColorRGBA.Yellow);
+        booster.setStartSize(2f);
+        booster.setEndSize(0.5f);
+        booster.setGravity(0, 0, 0);
+        booster.getParticleInfluencer().setInitialVelocity(new Vector3f(0, -10, 0));
+        booster.getParticleInfluencer().setVelocityVariation(0.3f);
+        missileNode.attachChild(booster);
+
+        smoke = new ParticleEmitter("Smoke", ParticleMesh.Type.Triangle, 50);
+        Material smokeMat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        smokeMat.setTexture("Texture", assetManager.loadTexture("Effects/Smoke/Smoke.png"));
+        smoke.setMaterial(smokeMat);
+        smoke.setStartColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 0.5f));
+        smoke.setEndColor(new ColorRGBA(0.2f, 0.2f, 0.2f, 0f));
+        smoke.setStartSize(3f);
+        smoke.setEndSize(6f);
+        smoke.setLowLife(2f);
+        smoke.setHighLife(4f);
+        smoke.setGravity(0, 0, 0);
+        smoke.getParticleInfluencer().setInitialVelocity(new Vector3f(0, -3, 0));
+        smoke.getParticleInfluencer().setVelocityVariation(1f);
+        missileNode.attachChild(smoke);
+
+        booster.setEnabled(false);
+        smoke.setEnabled(false);
+    }
+
     @Override
     public void update(float tpf) {
         RigidBodyControl ctrl = this.missileNode.getControl(RigidBodyControl.class);
@@ -117,6 +153,9 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
             rot = rot.mult(offset);
             ctrl.setPhysicsRotation(rot);
         }
+
+        booster.setEnabled(vel.y != 0f);
+        smoke.setEnabled(vel.y != 0f);
     }
 
 }
