@@ -3,9 +3,7 @@ package states;
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
-import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
@@ -22,17 +20,17 @@ public class CityAppState extends AbstractEmptyAppState {
 
     @Override
     protected void initialize(Application application) {
+        PhysicsAppState physics = getState(PhysicsAppState.class);
+
         this.cityNode = (Node) assetManager.loadModel(new ModelKey("Scenes/city/city.glb"));
         this.cityNode.setName("City");
         this.cityNode.setLocalScale(0.03f);
         this.cityNode.setLocalTranslation(new Vector3f(0, -100, 0));
 
-        CollisionShape cityShape = CollisionShapeFactory.createMeshShape(this.cityNode);
-        RigidBodyControl cityRigidBody = new RigidBodyControl(cityShape, 0);
+        RigidBodyControl cityRigidBody = new RigidBodyControl(0);
         this.cityNode.addControl(cityRigidBody);
 
         rootNode.attachChild(this.cityNode);
-        PhysicsAppState physics = getState(PhysicsAppState.class);
         physics.addToPhysicsSpace(this.cityNode);
     }
 

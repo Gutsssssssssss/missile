@@ -42,6 +42,7 @@ public class MissileSimulator extends SimpleApplication {
         stateManager.attach(new CollisionAppState());
         stateManager.attach(new FloorAppState(rootNode, assetManager));
         stateManager.attach(new ChaseCameraAppState(missileCam, inputManager));
+        stateManager.attach(new LauncherAppState(rootNode, assetManager));
 
 //        cam.setLocation(new Vector3f(-17000, 10, 0));
     }
