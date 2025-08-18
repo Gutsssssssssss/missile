@@ -31,7 +31,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
         CollisionAppState collisionAppState = getState(CollisionAppState.class);
         CityAppState cityAppState = getState(CityAppState.class);
-        ChaseCameraAppState chaseCameraAppState = getState(ChaseCameraAppState.class);
+        MultiChaseCameraAppState multiChaseCameraAppState = getState(MultiChaseCameraAppState.class);
 
         this.missileNode = (Node) this.assetManager.loadModel(new ModelKey("Objects/missile/ballisticMissile.glb"));
         this.missileNode.setName("BallisticMissile");
@@ -58,7 +58,7 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         });
 
         initEffects(assetManager, missileNode);
-        chaseCameraAppState.setChaseCamera(missileNode);
+        multiChaseCameraAppState.addChaseCamera("BallisticMissile", missileNode, 0.7f, 1.0f, 0.0f, 0.3f);
     }
 
     private Vector3f calculateMissileVelocity(Vector3f target, Vector3f start, float thetaDeg) {
@@ -76,9 +76,14 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
         return directionXZ.mult(velocityXZ).add(0, velocityY, 0);
     }
 
+//    private boolean isMissileHitCity(String a, String b) {
+//        return (a.equals("BallisticMissile") && b.equals("City"))
+//                || (a.equals("City") && b.equals("BallisticMissile"));
+//    }
+
     private boolean isMissileHitCity(String a, String b) {
-        return (a.equals("BallisticMissile") && b.equals("City"))
-                || (a.equals("City") && b.equals("BallisticMissile"));
+        return (a.equals("BallisticMissile")
+                || b.equals("BallisticMissile"));
     }
 
     private void spawnExplosion(Vector3f location) {
@@ -140,6 +145,10 @@ public class BallisticMissileAppState extends AbstractEmptyAppState {
 
         booster.setEnabled(false);
         smoke.setEnabled(false);
+    }
+
+    public Vector3f getWorldTransition() {
+        return this.missileNode.getWorldTranslation();
     }
 
     @Override

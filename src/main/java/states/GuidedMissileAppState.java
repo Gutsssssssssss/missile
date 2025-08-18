@@ -1,0 +1,54 @@
+package states;
+
+import com.jme3.app.Application;
+import com.jme3.asset.AssetManager;
+import com.jme3.asset.ModelKey;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+
+public class GuidedMissileAppState extends AbstractEmptyAppState {
+
+    private final Node rootNode;
+    private final AssetManager assetManager;
+    protected BallisticMissileAppState target;
+    protected Node missileNode;
+    protected boolean chasing;
+    protected float elapsedTime;
+
+    public GuidedMissileAppState(Node rootNode, AssetManager assetManager) {
+        this.rootNode = rootNode;
+        this.assetManager = assetManager;
+    }
+
+    @Override
+    protected void initialize(Application application) {
+        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
+        MultiChaseCameraAppState multiChaseCameraAppState = getState(MultiChaseCameraAppState.class);
+        target = getState(BallisticMissileAppState.class);
+
+
+        this.missileNode = (Node) assetManager.loadModel(new ModelKey("Objects/missile/guidedMissile.glb"));
+        this.missileNode.setName("GuidedMissile");
+        this.missileNode.setLocalTranslation(new Vector3f(0, -50, 300));
+
+        RigidBodyControl missileRigidBody = new RigidBodyControl(1f);
+        this.missileNode.addControl(missileRigidBody);
+
+        missileRigidBody.setLinearVelocity(new Vector3f(0, 100, 0));
+
+        Quaternion rotation = new Quaternion();
+        rotation.lookAt(missileRigidBody.getLinearVelocity(), Vector3f.UNIT_Y);
+        Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI / 2, Vector3f.UNIT_Y);
+        rotation = rotation.mult(offset);
+        missileRigidBody.setPhysicsRotation(rotation);
+
+        rootNode.attachChild(this.missileNode);
+        physicsAppState.addToPhysicsSpace(this.missileNode);
+
+        multiChaseCameraAppState.addChaseCamera("GuidedMissile", missileNode, 0.7f, 1.0f, 0.3f, 0.6f);
+    }
+
+}
