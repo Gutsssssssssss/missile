@@ -1,4 +1,4 @@
-package states;
+package map;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -7,6 +7,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import util.AbstractEmptyAppState;
 
 public class LightAppState extends AbstractEmptyAppState {
 

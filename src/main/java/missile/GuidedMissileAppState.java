@@ -1,4 +1,4 @@
-package states;
+package missile;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -8,6 +8,10 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import util.AbstractEmptyAppState;
+import util.MultiChaseCameraAppState;
+import util.PhysicsAppState;
+import util.ObjectType;
 
 public class GuidedMissileAppState extends AbstractEmptyAppState {
 
@@ -17,28 +21,28 @@ public class GuidedMissileAppState extends AbstractEmptyAppState {
     protected Node missileNode;
     protected boolean chasing;
     protected float elapsedTime;
+    private PhysicsAppState physicsAppState;
 
-    public GuidedMissileAppState(Node rootNode, AssetManager assetManager) {
+    protected GuidedMissileAppState(Node rootNode, AssetManager assetManager) {
         this.rootNode = rootNode;
         this.assetManager = assetManager;
     }
 
     @Override
     protected void initialize(Application application) {
-        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
+        physicsAppState = getState(PhysicsAppState.class);
         MultiChaseCameraAppState multiChaseCameraAppState = getState(MultiChaseCameraAppState.class);
+        EffectAppState effectAppState = getState(EffectAppState.class);
         target = getState(BallisticMissileAppState.class);
 
 
         this.missileNode = (Node) assetManager.loadModel(new ModelKey("Objects/missile/guidedMissile.glb"));
-        this.missileNode.setName("GuidedMissile");
+        this.missileNode.setName(ObjectType.GUIDED_MISSILE);
         this.missileNode.setLocalTranslation(new Vector3f(0, -50, 300));
 
         RigidBodyControl missileRigidBody = new RigidBodyControl(1f);
         this.missileNode.addControl(missileRigidBody);
-
         missileRigidBody.setLinearVelocity(new Vector3f(0, 100, 0));
-
         Quaternion rotation = new Quaternion();
         rotation.lookAt(missileRigidBody.getLinearVelocity(), Vector3f.UNIT_Y);
         Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI / 2, Vector3f.UNIT_Y);
@@ -48,7 +52,13 @@ public class GuidedMissileAppState extends AbstractEmptyAppState {
         rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
 
-        multiChaseCameraAppState.addChaseCamera("GuidedMissile", missileNode, 0.7f, 1.0f, 0.3f, 0.6f);
+        effectAppState.addBoosterEffects(missileNode);
+        multiChaseCameraAppState.addChaseCamera(ObjectType.GUIDED_MISSILE, missileNode, 0.7f, 1.0f, 0.3f, 0.6f);
+    }
+
+    public void removeMissile() {
+        this.physicsAppState.removeFromPhysicsSpace(this.missileNode.getControl(RigidBodyControl.class));
+        this.missileNode.removeFromParent();
     }
 
 }

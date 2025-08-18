@@ -1,4 +1,4 @@
-package states;
+package util;
 
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;
@@ -29,6 +29,9 @@ public class MultiChaseCameraAppState extends AbstractEmptyAppState {
     }
 
     public void addChaseCamera(String id, Spatial obj, float left, float right, float bottom, float top) {
+        if (chaseCameras.containsKey(id)) {
+            return;
+        }
         Camera cloneCam = defaultCamera.clone();
         cloneCam.setViewPort(left, right, bottom, top);
         ViewPort missileView = renderManager.createMainView(id, cloneCam);

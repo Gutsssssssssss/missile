@@ -1,4 +1,4 @@
-package states;
+package missile;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -27,7 +27,7 @@ public class PurePursuitGuidedMissileAppState extends GuidedMissileAppState {
         Vector3f targetTranslation = this.target.getWorldTransition();
         Vector3f missileTranslation = this.missileNode.getWorldTranslation();
         Vector3f LOS = targetTranslation.subtract(missileTranslation);
-        LOS = LOS.mult(4);
+        LOS = LOS.mult(10);
         this.missileNode.getControl(RigidBodyControl.class).setLinearVelocity(LOS);
 
         Quaternion rotation = new Quaternion();

@@ -1,10 +1,12 @@
-package states;
+package map;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
+import util.AbstractEmptyAppState;
+import util.PhysicsAppState;
 
 public class LauncherAppState extends AbstractEmptyAppState {
 

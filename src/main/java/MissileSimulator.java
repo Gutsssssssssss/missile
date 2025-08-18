@@ -4,7 +4,14 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
-import states.*;
+import map.CityAppState;
+import map.FloorAppState;
+import map.LauncherAppState;
+import map.LightAppState;
+import missile.BallisticMissileAppState;
+import missile.EffectAppState;
+import missile.PurePursuitGuidedMissileAppState;
+import util.*;
 
 /**
  * Main application class for the Missile Simulator.
@@ -29,7 +36,7 @@ public class MissileSimulator extends SimpleApplication {
         cam.setFrustumFar(50000f);
         flyCam.setMoveSpeed(1000);
 
-
+        stateManager.attach(new TextAppState(guiNode, assetManager));
         stateManager.attach(new PhysicsAppState());
         stateManager.attach(new LightAppState());
         stateManager.attach(new CityAppState(rootNode, assetManager));
@@ -38,6 +45,7 @@ public class MissileSimulator extends SimpleApplication {
         stateManager.attach(new FloorAppState(rootNode, assetManager));
         stateManager.attach(new LauncherAppState(rootNode, assetManager));
         stateManager.attach(new MultiChaseCameraAppState(rootNode, inputManager, renderManager, cam));
+        stateManager.attach(new EffectAppState(rootNode, assetManager));
 
         inputManager.addMapping("LaunchGuidedMissile", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener((ActionListener) (name, keyPressed, tpf) -> {
@@ -46,6 +54,4 @@ public class MissileSimulator extends SimpleApplication {
         }
     }, "LaunchGuidedMissile");
     }
-// test
-
 }
