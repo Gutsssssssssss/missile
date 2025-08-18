@@ -9,7 +9,7 @@ import com.jme3.scene.Spatial;
 /**
  * Manages the physics simulation using jMonkeyEngine's Bullet physics engine.
  * **/
-public class PhysicsAppState extends AbstractEmptyAppState {
+public class PhysicsAppState extends WrappedBaseAppState {
 
     private BulletAppState bulletAppState;
 

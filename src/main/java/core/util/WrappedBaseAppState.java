@@ -6,7 +6,7 @@ import com.jme3.app.state.BaseAppState;
 /**
  * Base class for AppState implementations, providing empty method overrides.
  * **/
-public class AbstractEmptyAppState extends BaseAppState {
+public class WrappedBaseAppState extends BaseAppState {
 
     @Override
     protected void initialize(Application application) {

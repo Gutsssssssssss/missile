@@ -10,11 +10,11 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import core.ObjectType;
 import core.map.CityAppState;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 import core.util.MultiChaseCameraAppState;
 import core.util.PhysicsAppState;
 
-public class BallisticMissileAppState extends AbstractEmptyAppState {
+public class BallisticMissileAppState extends WrappedBaseAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;

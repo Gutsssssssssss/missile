@@ -8,10 +8,10 @@ import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 import core.util.PhysicsAppState;
 
-public class FloorAppState extends AbstractEmptyAppState {
+public class FloorAppState extends WrappedBaseAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;

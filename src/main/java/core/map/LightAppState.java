@@ -7,9 +7,9 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 
-public class LightAppState extends AbstractEmptyAppState {
+public class LightAppState extends WrappedBaseAppState {
 
     @Override
     protected void initialize(Application application) {

@@ -13,7 +13,7 @@ import com.jme3.scene.Spatial;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MultiChaseCameraAppState extends AbstractEmptyAppState {
+public class MultiChaseCameraAppState extends WrappedBaseAppState {
 
     private final Map<String, ChaseCamera> chaseCameras = new HashMap<>();
     private final Node rootNode;

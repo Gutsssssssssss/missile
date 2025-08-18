@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 /**
  * Manages collision detection by registering a listener for physics events.
  * **/
-public class CollisionAppState extends AbstractEmptyAppState {
+public class CollisionAppState extends WrappedBaseAppState {
 
     private Consumer<PhysicsCollisionEvent> listener;
 

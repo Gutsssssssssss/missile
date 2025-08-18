@@ -5,10 +5,10 @@ import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.scene.Node;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 import core.util.PhysicsAppState;
 
-public class LauncherAppState extends AbstractEmptyAppState {
+public class LauncherAppState extends WrappedBaseAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;

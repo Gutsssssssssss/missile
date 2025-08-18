@@ -9,11 +9,11 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import core.ObjectType;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 import core.util.MultiChaseCameraAppState;
 import core.util.PhysicsAppState;
 
-public class GuidedMissileAppState extends AbstractEmptyAppState {
+public class GuidedMissileAppState extends WrappedBaseAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;

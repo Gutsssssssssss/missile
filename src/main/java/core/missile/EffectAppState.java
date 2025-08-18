@@ -7,9 +7,9 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import core.util.AbstractEmptyAppState;
+import core.util.WrappedBaseAppState;
 
-public class EffectAppState extends AbstractEmptyAppState {
+public class EffectAppState extends WrappedBaseAppState {
 
     private final Node rootNode;
     private final AssetManager assetManager;

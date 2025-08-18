@@ -7,7 +7,7 @@ import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 
-public class TextAppState extends AbstractEmptyAppState {
+public class TextAppState extends WrappedBaseAppState {
 
     private final Node guiNode;
     private final AssetManager assetManager;
