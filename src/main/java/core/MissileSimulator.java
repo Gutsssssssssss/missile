@@ -1,17 +1,19 @@
+package core;
+
 import com.jme3.app.SimpleApplication;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
 import com.jme3.system.AppSettings;
-import map.CityAppState;
-import map.FloorAppState;
-import map.LauncherAppState;
-import map.LightAppState;
-import missile.BallisticMissileAppState;
-import missile.EffectAppState;
-import missile.PurePursuitGuidedMissileAppState;
-import util.*;
+import core.map.CityAppState;
+import core.map.FloorAppState;
+import core.map.LauncherAppState;
+import core.map.LightAppState;
+import core.missile.BallisticMissileAppState;
+import core.missile.EffectAppState;
+import core.missile.PurePursuitGuidedMissileAppState;
+import core.util.*;
 
 /**
  * Main application class for the Missile Simulator.

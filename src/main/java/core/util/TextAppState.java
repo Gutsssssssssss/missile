@@ -1,4 +1,4 @@
-package util;
+package core.util;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;

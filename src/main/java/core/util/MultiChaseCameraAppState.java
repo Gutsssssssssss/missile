@@ -1,4 +1,4 @@
-package util;
+package core.util;
 
 import com.jme3.input.ChaseCamera;
 import com.jme3.input.InputManager;

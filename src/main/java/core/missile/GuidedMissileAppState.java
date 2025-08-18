@@ -1,4 +1,4 @@
-package missile;
+package core.missile;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -8,10 +8,10 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import util.AbstractEmptyAppState;
-import util.MultiChaseCameraAppState;
-import util.PhysicsAppState;
-import util.ObjectType;
+import core.ObjectType;
+import core.util.AbstractEmptyAppState;
+import core.util.MultiChaseCameraAppState;
+import core.util.PhysicsAppState;
 
 public class GuidedMissileAppState extends AbstractEmptyAppState {
 

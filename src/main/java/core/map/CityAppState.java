@@ -1,4 +1,4 @@
-package map;
+package core.map;
 
 import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
@@ -6,9 +6,9 @@ import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
-import util.ObjectType;
-import util.AbstractEmptyAppState;
-import util.PhysicsAppState;
+import core.ObjectType;
+import core.util.AbstractEmptyAppState;
+import core.util.PhysicsAppState;
 
 public class CityAppState extends AbstractEmptyAppState {
 

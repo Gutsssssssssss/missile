@@ -1,11 +1,12 @@
-package util;
+package core.util;
 
 import com.jme3.app.Application;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.math.Vector3f;
-import missile.BallisticMissileAppState;
-import missile.EffectAppState;
-import missile.PurePursuitGuidedMissileAppState;
+import core.ObjectType;
+import core.missile.BallisticMissileAppState;
+import core.missile.EffectAppState;
+import core.missile.PurePursuitGuidedMissileAppState;
 
 import java.util.function.Consumer;
 

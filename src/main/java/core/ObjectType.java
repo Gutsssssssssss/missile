@@ -1,4 +1,4 @@
-package util;
+package core;
 
 public class ObjectType {
     public static final String BALLISTIC_MISSILE = "BallisticMissile";

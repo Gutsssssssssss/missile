@@ -1,4 +1,4 @@
-package missile;
+package core.missile;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.RigidBodyControl;
