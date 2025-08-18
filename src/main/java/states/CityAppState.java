@@ -20,7 +20,7 @@ public class CityAppState extends AbstractEmptyAppState {
 
     @Override
     protected void initialize(Application application) {
-        PhysicsAppState physics = getState(PhysicsAppState.class);
+        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
 
         this.cityNode = (Node) assetManager.loadModel(new ModelKey("Scenes/city/city.glb"));
         this.cityNode.setName("City");
@@ -31,7 +31,7 @@ public class CityAppState extends AbstractEmptyAppState {
         this.cityNode.addControl(cityRigidBody);
 
         rootNode.attachChild(this.cityNode);
-        physics.addToPhysicsSpace(this.cityNode);
+        physicsAppState.addToPhysicsSpace(this.cityNode);
     }
 
     public Vector3f getWorldTranslation() {

@@ -21,6 +21,8 @@ public class FloorAppState extends AbstractEmptyAppState {
 
     @Override
     protected void initialize(Application application) {
+        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
+
         Geometry floor = new Geometry("Floor", new Box(40f, 0.1f, 20f));
         Material matFloor = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
         matFloor.setTexture("ColorMap", assetManager.loadTexture("Textures/Terrain/BrickWall/BrickWall.jpg"));
@@ -28,6 +30,8 @@ public class FloorAppState extends AbstractEmptyAppState {
         floor.setLocalTranslation(new Vector3f(-17000, 0, 0));
         RigidBodyControl floorControl = new RigidBodyControl(0);
         floor.addControl(floorControl);
+
         rootNode.attachChild(floor);
+        physicsAppState.addToPhysicsSpace(floor);
     }
 }

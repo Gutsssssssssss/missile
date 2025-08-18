@@ -19,17 +19,17 @@ public class LauncherAppState extends AbstractEmptyAppState {
 
     @Override
     protected void initialize(Application application) {
-        PhysicsAppState physics = getState(PhysicsAppState.class);
+        PhysicsAppState physicsAppState = getState(PhysicsAppState.class);
 
         this.launcherNode = (Node) assetManager.loadModel(new ModelKey("Objects/launcher/MissileLauncher.glb"));
         this.launcherNode.setName("Launcher");
-        this.launcherNode.setLocalTranslation(0, -90, 300);
+        this.launcherNode.setLocalTranslation(0, -100, 300);
         this.launcherNode.setLocalScale(6f);
 
-        RigidBodyControl radarRigidBody = new RigidBodyControl(1f);
+        RigidBodyControl radarRigidBody = new RigidBodyControl(0f);
         this.launcherNode.addControl(radarRigidBody);
 
         rootNode.attachChild(this.launcherNode);
-        physics.addToPhysicsSpace(this.launcherNode);
+        physicsAppState.addToPhysicsSpace(this.launcherNode);
     }
 }
