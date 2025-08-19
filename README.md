@@ -18,9 +18,10 @@ A 3D missile simulation built with **Java** and **JMonkeyEngine**, featuring sim
 
 ### 🛡️ **Anti-Ballistic Missile Simulation**
 - **Guidance systems implemented**:
-    - **Pure Pursuit** → directly tracks the current position of the ballistic missile.
-    - **Proportional Navigation** → predicts the missile’s trajectory and intercepts accordingly.
-- On successful interception, an **explosion event** occurs at the collision point.  
+  - **Pure Pursuit** → directly tracks the current position of the ballistic missile. However, this method often results in **longer flight times** and a **high failure rate** in interception.
+  - **Proportional Navigation** → predicts the missile’s trajectory and intercepts accordingly, offering a **more efficient and reliable interception** compared to Pure Pursuit.
+- On successful interception, an **explosion animation** occurs at the collision point.
+
 
 ## 3D Model Sources
 - [City](https://free3d.com/3d-model/huge-city-788526.html)
