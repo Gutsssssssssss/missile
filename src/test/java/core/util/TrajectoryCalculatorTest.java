@@ -19,5 +19,16 @@ class TrajectoryCalculatorTest {
         assertEquals(expectedVelocity, actualVelocity, 0.001f);
     }
 
+    @Test
+    void testInvalidBallisticAngle() {
+        Vector3f start = new Vector3f(0, 10, 0);
+        Vector3f target = new Vector3f(100, 0, 0);
+        float ballisticAngle1 = (float) Math.toRadians(90f);
+        float ballisticAngle2 = (float) Math.toRadians(0f);
 
+        assertThrows(IllegalArgumentException.class,
+                () -> TrajectoryCalculator.calculateBallisticVelocity(start, target, ballisticAngle1));
+        assertThrows(IllegalArgumentException.class,
+                () -> TrajectoryCalculator.calculateBallisticVelocity(start, target, ballisticAngle2));
+    }
 }
