@@ -12,8 +12,11 @@ import core.map.LauncherAppState;
 import core.map.LightAppState;
 import core.missile.BallisticMissileAppState;
 import core.missile.EffectAppState;
-import core.missile.PurePursuitGuidedMissileAppState;
-import core.util.*;
+import core.missile.ProportionalNavigationGuidedMissileAppState;
+import core.util.CollisionAppState;
+import core.util.MultiChaseCameraAppState;
+import core.util.PhysicsAppState;
+import core.util.TextAppState;
 
 /**
  * Main application class for the Missile Simulator.
@@ -52,7 +55,7 @@ public class MissileSimulator extends SimpleApplication {
         inputManager.addMapping("LaunchGuidedMissile", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener((ActionListener) (name, keyPressed, tpf) -> {
             if (name.equals("LaunchGuidedMissile") && !keyPressed) {
-                stateManager.attach(new PurePursuitGuidedMissileAppState(rootNode, assetManager));
+                stateManager.attach(new ProportionalNavigationGuidedMissileAppState(rootNode, assetManager));
         }
     }, "LaunchGuidedMissile");
     }

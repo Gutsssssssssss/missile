@@ -21,6 +21,7 @@ public class BallisticMissileAppState extends WrappedBaseAppState {
     private final AssetManager assetManager;
     private Node missileNode;
     private PhysicsAppState physicsAppState;
+    private RigidBodyControl ctrl;
 
     public BallisticMissileAppState(Node rootNode, AssetManager assetManager) {
         this.rootNode = rootNode;
@@ -48,6 +49,7 @@ public class BallisticMissileAppState extends WrappedBaseAppState {
         this.rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
 
+        ctrl = this.missileNode.getControl(RigidBodyControl.class);
         effectAppState.addBoosterEffects(missileNode);
         multiChaseCameraAppState.addChaseCamera(ObjectType.BALLISTIC_MISSILE, missileNode, 0.7f, 1.0f, 0.0f, 0.3f);
     }
@@ -57,13 +59,16 @@ public class BallisticMissileAppState extends WrappedBaseAppState {
         this.missileNode.removeFromParent();
     }
 
-    public Vector3f getWorldTransition() {
+    public Vector3f getPos() {
         return this.missileNode.getWorldTranslation();
+    }
+
+    public Vector3f getVel() {
+        return this.ctrl.getLinearVelocity();
     }
 
     @Override
     public void update(float tpf) {
-        RigidBodyControl ctrl = this.missileNode.getControl(RigidBodyControl.class);
         Vector3f vel = ctrl.getLinearVelocity();
         if (vel.lengthSquared() > 1e-3f) {
             Quaternion rot = new Quaternion();

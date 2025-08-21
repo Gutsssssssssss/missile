@@ -21,6 +21,7 @@ public class GuidedMissileAppState extends WrappedBaseAppState {
     protected Node missileNode;
     protected boolean chasing;
     protected float elapsedTime;
+    protected RigidBodyControl missileCtrl;
     private PhysicsAppState physicsAppState;
 
     protected GuidedMissileAppState(Node rootNode, AssetManager assetManager) {
@@ -45,13 +46,14 @@ public class GuidedMissileAppState extends WrappedBaseAppState {
         missileRigidBody.setLinearVelocity(new Vector3f(0, 100, 0));
         Quaternion rotation = new Quaternion();
         rotation.lookAt(missileRigidBody.getLinearVelocity(), Vector3f.UNIT_Y);
-        Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI / 2, Vector3f.UNIT_Y);
+        Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
         rotation = rotation.mult(offset);
         missileRigidBody.setPhysicsRotation(rotation);
 
         rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
 
+        missileCtrl = this.missileNode.getControl(RigidBodyControl.class);
         effectAppState.addBoosterEffects(missileNode);
         multiChaseCameraAppState.addChaseCamera(ObjectType.GUIDED_MISSILE, missileNode, 0.7f, 1.0f, 0.3f, 0.6f);
     }

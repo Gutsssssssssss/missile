@@ -5,10 +5,11 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import core.util.TrajectoryCalculator;
 
-public class PurePursuitGuidedMissileAppState extends GuidedMissileAppState {
+public class ProportionalNavigationGuidedMissileAppState extends GuidedMissileAppState {
 
-    public PurePursuitGuidedMissileAppState(Node rootNode, AssetManager assetManager) {
+    public ProportionalNavigationGuidedMissileAppState(Node rootNode, AssetManager assetManager) {
         super(rootNode, assetManager);
     }
 
@@ -18,18 +19,23 @@ public class PurePursuitGuidedMissileAppState extends GuidedMissileAppState {
         if (!this.chasing) {
             if (this.elapsedTime >= 1f) {
                 this.chasing = true;
+                this.missileCtrl.setLinearVelocity(new Vector3f(0, 200f, 0));
             } else {
                 return;
             }
         }
 
-        Vector3f targetPos = this.target.getPos();
         Vector3f missilePos = this.missileNode.getWorldTranslation();
-        Vector3f LOS = targetPos.subtract(missilePos);
-        LOS = LOS.mult(0.05f);
-        missileCtrl.setLinearVelocity(LOS);
+        Vector3f missileVel = this.missileCtrl.getLinearVelocity();
+        Vector3f targetPos = this.target.getPos();
+        Vector3f targetVel = this.target.getVel();
+
+        Vector3f a = TrajectoryCalculator.calculatePNAcceleration(missilePos, missileVel, targetPos, targetVel);
+        missileVel = missileVel.add(a.mult(tpf));
+        this.missileCtrl.setLinearVelocity(missileVel);
+
         Quaternion rotation = new Quaternion();
-        rotation.lookAt(LOS.normalize(), Vector3f.UNIT_Y);
+        rotation.lookAt(missileVel.normalize(), Vector3f.UNIT_Y);
         Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
         rotation = rotation.mult(offset);
         missileCtrl.setPhysicsRotation(rotation);

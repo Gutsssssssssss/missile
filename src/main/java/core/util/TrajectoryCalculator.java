@@ -14,14 +14,14 @@ public class TrajectoryCalculator {
         float distanceXZ = (float) Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
         float distanceY = toTarget.y;
         float numerator = GRAVITY * distanceXZ * distanceXZ;
-        float denominator = 2 * (float)Math.cos(ballisticAngle) * (float)Math.cos(ballisticAngle)
-                * (distanceXZ * (float)Math.tan(ballisticAngle) - distanceY);
+        float denominator = 2 * (float) Math.cos(ballisticAngle) * (float) Math.cos(ballisticAngle)
+                * (distanceXZ * (float) Math.tan(ballisticAngle) - distanceY);
 
         if (denominator <= 0) {
             throw new IllegalArgumentException("Cannot launch under given conditions");
         }
 
-        return (float)Math.sqrt(numerator / denominator);
+        return (float) Math.sqrt(numerator / denominator);
     }
 
     public static Vector3f convertToVector(Vector3f start, Vector3f target, float velocity, float ballisticAngle) {
@@ -31,5 +31,15 @@ public class TrajectoryCalculator {
 
         Vector3f directionXZ = new Vector3f(toTarget.x, 0, toTarget.z).normalizeLocal();
         return directionXZ.mult(velocityXZ).add(0, velocityY, 0);
+    }
+
+    public static Vector3f calculatePNAcceleration(Vector3f startPos, Vector3f startVel, Vector3f endPos, Vector3f endVel) {
+        float N = 3f;
+
+        Vector3f distance = endPos.subtract(startPos);
+        Vector3f relVel = endVel.subtract(startVel);
+        Vector3f angularVel = distance.cross(relVel).divide(distance.dot(distance));
+
+        return distance.normalize().cross(angularVel).mult(-N * relVel.length());
     }
 }

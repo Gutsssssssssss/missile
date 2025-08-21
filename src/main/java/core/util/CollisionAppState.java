@@ -6,7 +6,7 @@ import com.jme3.math.Vector3f;
 import core.ObjectType;
 import core.missile.BallisticMissileAppState;
 import core.missile.EffectAppState;
-import core.missile.PurePursuitGuidedMissileAppState;
+import core.missile.GuidedMissileAppState;
 
 import java.util.function.Consumer;
 
@@ -41,7 +41,7 @@ public class CollisionAppState extends WrappedBaseAppState {
                 Vector3f contactPoint = event.getPositionWorldOnB();
                 effectAppState.spawnExplosionEffects(contactPoint);
                 ballisticMissileAppState.removeMissile();
-                PurePursuitGuidedMissileAppState guidedMissileAppState = getState(PurePursuitGuidedMissileAppState.class);
+                GuidedMissileAppState guidedMissileAppState = getState(GuidedMissileAppState.class);
                 guidedMissileAppState.removeMissile();
             }
         };
