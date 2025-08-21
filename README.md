@@ -24,7 +24,7 @@ A 3D missile simulation built with **Java** and **JMonkeyEngine**, featuring sim
   - **Proportional Navigation** → improves on this by predicting the missile’s future trajectory and guiding the interceptor accordingly, resulting in **much higher interception success rates**.
 - On successful interception, an **explosion animation** occurs at the collision point.
 
-<img src="./docs/img/pn_algorithm.gif" alt="game screenshot" width="200">
+<img src="./docs/img/PN_algorithm.gif" alt="game screenshot" width="200">
 (Proportional Navigation algorithm)
 
 <img src="docs/img/guidedMissile.gif" alt="game screenshot" width="600">
