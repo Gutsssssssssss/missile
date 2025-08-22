@@ -1,8 +1,6 @@
 package core.missile;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import core.util.TrajectoryCalculator;
@@ -34,10 +32,7 @@ public class ProportionalNavigationGuidedMissileAppState extends GuidedMissileAp
         missileVel = missileVel.add(a.mult(tpf));
         this.missileCtrl.setLinearVelocity(missileVel);
 
-        Quaternion rotation = new Quaternion();
-        rotation.lookAt(missileVel.normalize(), Vector3f.UNIT_Y);
-        Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
-        rotation = rotation.mult(offset);
-        missileCtrl.setPhysicsRotation(rotation);
+        TrajectoryCalculator.correctAngle(missileVel.normalize(), missileCtrl);
     }
+
 }

@@ -4,14 +4,13 @@ import com.jme3.app.Application;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.ModelKey;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 import core.ObjectType;
-import core.util.WrappedBaseAppState;
 import core.util.MultiChaseCameraAppState;
 import core.util.PhysicsAppState;
+import core.util.TrajectoryCalculator;
+import core.util.WrappedBaseAppState;
 
 public class GuidedMissileAppState extends WrappedBaseAppState {
 
@@ -44,11 +43,7 @@ public class GuidedMissileAppState extends WrappedBaseAppState {
         RigidBodyControl missileRigidBody = new RigidBodyControl(1f);
         this.missileNode.addControl(missileRigidBody);
         missileRigidBody.setLinearVelocity(new Vector3f(0, 100, 0));
-        Quaternion rotation = new Quaternion();
-        rotation.lookAt(missileRigidBody.getLinearVelocity(), Vector3f.UNIT_Y);
-        Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
-        rotation = rotation.mult(offset);
-        missileRigidBody.setPhysicsRotation(rotation);
+        TrajectoryCalculator.correctAngle(missileRigidBody.getLinearVelocity(), missileRigidBody);
 
         rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
