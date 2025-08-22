@@ -27,6 +27,6 @@ public class PurePursuitGuidedMissileAppState extends GuidedMissileAppState {
         Vector3f LOS = targetPos.subtract(missilePos);
         LOS = LOS.mult(0.05f);
         missileCtrl.setLinearVelocity(LOS);
-        TrajectoryCalculator.correctAngle(LOS.normalize(), missileCtrl);
+        this.missileCtrl.setPhysicsRotation(TrajectoryCalculator.correctAngle(LOS.normalize()));
     }
 }

@@ -1,6 +1,5 @@
 package core.util;
 
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -46,11 +45,10 @@ public class TrajectoryCalculator {
         return distance.normalize().cross(angularVel).mult(-N * relVel.length());
     }
 
-    public static void correctAngle(Vector3f direction, RigidBodyControl ctrl) {
+    public static Quaternion correctAngle(Vector3f direction) {
         Quaternion rotation = new Quaternion();
         rotation.lookAt(direction, Vector3f.UNIT_Y);
         Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
-        rotation = rotation.mult(offset);
-        ctrl.setPhysicsRotation(rotation);
+        return rotation.mult(offset);
     }
 }

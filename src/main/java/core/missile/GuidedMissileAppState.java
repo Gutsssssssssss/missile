@@ -43,7 +43,7 @@ public class GuidedMissileAppState extends WrappedBaseAppState {
         RigidBodyControl missileRigidBody = new RigidBodyControl(1f);
         this.missileNode.addControl(missileRigidBody);
         missileRigidBody.setLinearVelocity(new Vector3f(0, 100, 0));
-        TrajectoryCalculator.correctAngle(missileRigidBody.getLinearVelocity(), missileRigidBody);
+        missileRigidBody.setPhysicsRotation(TrajectoryCalculator.correctAngle(missileRigidBody.getLinearVelocity()));
 
         rootNode.attachChild(this.missileNode);
         physicsAppState.addToPhysicsSpace(this.missileNode);
