@@ -69,7 +69,7 @@ public class BallisticMissileAppState extends WrappedBaseAppState {
     public void update(float tpf) {
         Vector3f vel = this.ctrl.getLinearVelocity();
         if (vel.lengthSquared() > 1e-3f) {
-            this.ctrl.setPhysicsRotation(TrajectoryCalculator.correctAngle(vel.normalize()));
+            this.ctrl.setPhysicsRotation(TrajectoryCalculator.getRotationTowards(vel.normalize()));
         }
     }
 

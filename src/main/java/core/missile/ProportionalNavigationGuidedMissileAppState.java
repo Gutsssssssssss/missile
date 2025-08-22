@@ -31,7 +31,7 @@ public class ProportionalNavigationGuidedMissileAppState extends GuidedMissileAp
         Vector3f a = TrajectoryCalculator.calculatePNAcceleration(missilePos, missileVel, targetPos, targetVel);
         missileVel = missileVel.add(a.mult(tpf));
         this.missileCtrl.setLinearVelocity(missileVel);
-        this.missileCtrl.setPhysicsRotation(TrajectoryCalculator.correctAngle(missileVel.normalize()));
+        this.missileCtrl.setPhysicsRotation(TrajectoryCalculator.getRotationTowards(missileVel.normalize()));
     }
 
 }

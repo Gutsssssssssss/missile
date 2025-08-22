@@ -45,7 +45,7 @@ public class TrajectoryCalculator {
         return distance.normalize().cross(angularVel).mult(-N * relVel.length());
     }
 
-    public static Quaternion correctAngle(Vector3f direction) {
+    public static Quaternion getRotationTowards(Vector3f direction) {
         Quaternion rotation = new Quaternion();
         rotation.lookAt(direction, Vector3f.UNIT_Y);
         Quaternion offset = new Quaternion().fromAngleAxis(FastMath.HALF_PI, Vector3f.UNIT_Y);
